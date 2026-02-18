@@ -1,6 +1,6 @@
 {
     "name": "xcopy/laravel-contacts",
-    "description": "Laravel package for managing contacts",
+    "description": "A simple Laravel package for managing polymorphic contact information for any Eloquent model.",
     "keywords": [
         "php",
         "laravel",
@@ -70,5 +70,11 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/xcopy/laravel-support"
+        }
+    ]
 }
