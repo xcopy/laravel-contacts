@@ -33,17 +33,19 @@ Perfect for multi-tenant SaaS applications, CRMs, or property management systems
 }
 ```
 
-You can publish and run the migrations with:
+Run the installation command (publishes config and migrations):
 
 ```bash
-php artisan vendor:publish --tag="contacts-migrations"
+php artisan contacts:install
 php artisan migrate
 ```
 
-You can publish the config file with:
+Or publish manually:
 
 ```bash
+php artisan vendor:publish --tag="contacts-migrations"
 php artisan vendor:publish --tag="contacts-config"
+php artisan migrate
 ```
 
 ## Usage
