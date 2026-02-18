@@ -9,6 +9,9 @@ use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
 use Jenishev\Laravel\Support\Eloquent\Casts\AsModelClass;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
+/**
+ * Contact model for managing contact information.
+ */
 class Contact extends Model
 {
     use BlameableTrait;
@@ -40,6 +43,9 @@ class Contact extends Model
         ];
     }
 
+    /**
+     * Get the parent model that owns the contact.
+     */
     public function model(): MorphTo
     {
         return $this->morphTo();

@@ -5,6 +5,9 @@ namespace Jenishev\Laravel\Contacts\Enums;
 use Jenishev\Laravel\Support\Enums\Concerns\HasChoices;
 use Jenishev\Laravel\Support\Enums\Concerns\HasValues;
 
+/**
+ * Defines available contact method types for the system.
+ */
 enum ContactTypeEnum: string
 {
     use HasChoices {
@@ -20,6 +23,9 @@ enum ContactTypeEnum: string
     case Website = 'website';
     case Other = 'other';
 
+    /**
+     * {@inheritDoc}
+     */
     public function label(): string
     {
         if ($this->value === 'whatsapp') {
