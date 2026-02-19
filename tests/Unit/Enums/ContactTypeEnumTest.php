@@ -7,7 +7,6 @@ it('has all expected cases', function () {
 
     expect($cases)->toContain(ContactTypeEnum::Phone)
         ->and($cases)->toContain(ContactTypeEnum::Email)
-        ->and($cases)->toContain(ContactTypeEnum::Mobile)
         ->and($cases)->toContain(ContactTypeEnum::Whatsapp)
         ->and($cases)->toContain(ContactTypeEnum::Telegram)
         ->and($cases)->toContain(ContactTypeEnum::Website)
@@ -17,7 +16,6 @@ it('has all expected cases', function () {
 it('has correct values for each case', function () {
     expect(ContactTypeEnum::Phone->value)->toBe('phone')
         ->and(ContactTypeEnum::Email->value)->toBe('email')
-        ->and(ContactTypeEnum::Mobile->value)->toBe('mobile')
         ->and(ContactTypeEnum::Whatsapp->value)->toBe('whatsapp')
         ->and(ContactTypeEnum::Telegram->value)->toBe('telegram')
         ->and(ContactTypeEnum::Website->value)->toBe('website')
@@ -27,7 +25,6 @@ it('has correct values for each case', function () {
 it('can be instantiated from value', function () {
     expect(ContactTypeEnum::from('phone'))->toBe(ContactTypeEnum::Phone)
         ->and(ContactTypeEnum::from('email'))->toBe(ContactTypeEnum::Email)
-        ->and(ContactTypeEnum::from('mobile'))->toBe(ContactTypeEnum::Mobile)
         ->and(ContactTypeEnum::from('whatsapp'))->toBe(ContactTypeEnum::Whatsapp)
         ->and(ContactTypeEnum::from('telegram'))->toBe(ContactTypeEnum::Telegram)
         ->and(ContactTypeEnum::from('website'))->toBe(ContactTypeEnum::Website)
@@ -64,7 +61,6 @@ it('returns all values using HasValues trait', function () {
     expect($values)->toBeArray()
         ->and($values)->toContain('phone')
         ->and($values)->toContain('email')
-        ->and($values)->toContain('mobile')
         ->and($values)->toContain('whatsapp')
         ->and($values)->toContain('telegram')
         ->and($values)->toContain('website')
@@ -77,7 +73,7 @@ it('returns choices using HasChoices trait', function () {
     expect($choices)
         ->toBeArray()
         ->and($choices)
-        ->toHaveKeys(['phone', 'email', 'mobile', 'whatsapp', 'telegram', 'website', 'other']);
+        ->toHaveKeys(['phone', 'email', 'whatsapp', 'telegram', 'website', 'other']);
 });
 
 it('choices return case names as values', function () {
@@ -85,7 +81,6 @@ it('choices return case names as values', function () {
 
     expect($choices['phone'])->toBe('Phone')
         ->and($choices['email'])->toBe('Email')
-        ->and($choices['mobile'])->toBe('Mobile')
         ->and($choices['whatsapp'])->toBe('WhatsApp')
         ->and($choices['telegram'])->toBe('Telegram')
         ->and($choices['website'])->toBe('Website')
@@ -109,12 +104,6 @@ it('values are lowercase', function () {
     foreach (ContactTypeEnum::cases() as $case) {
         expect($case->value)->toBe(strtolower($case->value));
     }
-});
-
-it('phone and mobile are separate cases', function () {
-    expect(ContactTypeEnum::Phone)->not->toBe(ContactTypeEnum::Mobile)
-        ->and(ContactTypeEnum::Phone->value)->toBe('phone')
-        ->and(ContactTypeEnum::Mobile->value)->toBe('mobile');
 });
 
 it('has messaging app cases', function () {

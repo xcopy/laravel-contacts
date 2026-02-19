@@ -10,7 +10,8 @@ Perfect for multi-tenant SaaS applications, CRMs, or property management systems
 ## Features
 
 - **Polymorphic relationships**: Attach contacts to any Eloquent model
-- **Multiple contact types**: Phone, Email, Mobile, WhatsApp, Telegram, Website, and Other
+- **Multiple contact types**: Phone, Email, WhatsApp, Telegram, Website, and Other
+- **Smart value handling**: Automatic validation and normalization via strategy pattern
 - **Primary & verified flags**: Mark contacts as primary or verified
 - **Unique constraints**: Prevents duplicate contacts per model
 - **Type-safe**: Uses PHP 8.1+ enums and strict typing
@@ -110,6 +111,70 @@ $primaryContact = $company->contacts()->where('is_primary', true)->first();
 // Get verified contacts
 $verified = $company->contacts()->where('is_verified', true)->get();
 ```
+
+### 4. Value validation & normalization
+
+Contact values are automatically validated and normalized based on their type:
+
+```php
+// Email: lowercased and validated
+$company->contacts()->create([
+    'type' => ContactTypeEnum::Email,
+    'value' => 'User@Example.COM', // stored as: user@example.com
+]);
+
+// Phone: formatted to E.164
+$company->contacts()->create([
+    'type' => ContactTypeEnum::Phone,
+    'value' => '0555123456', // stored as: +996555123456
+    'country_code' => 'KG',  // optional, defaults to config
+]);
+
+// Telegram: normalized username
+$company->contacts()->create([
+    'type' => ContactTypeEnum::Telegram,
+    'value' => '@UserName', // stored as: username, retrieved as: @username
+]);
+
+// Website: normalized URL
+$company->contacts()->create([
+    'type' => ContactTypeEnum::Website,
+    'value' => 'example.com', // stored as: https://example.com
+]);
+
+// WhatsApp: formatted to E.164
+$company->contacts()->create([
+    'type' => ContactTypeEnum::Whatsapp,
+    'value' => '0555123456', // stored as: +996555123456
+    'country_code' => 'KG',
+]);
+```
+
+**Validation rules:**
+- **Email**: Valid email format, lowercased
+- **Phone**: Valid phone number for country, formatted per config (default: NATIONAL)
+- **WhatsApp**: Valid phone number for country, E.164 format
+- **Telegram**: 5–32 chars, alphanumeric and underscore, no consecutive/leading/trailing underscores
+- **Website**: Valid URL, auto-adds `https://` if missing
+- **Other**: No validation, stored as-is
+
+### 5. Phone number formatting
+
+Phone numbers support configurable formatting via `config/contacts.php`:
+
+```php
+// Available formats: E164, INTERNATIONAL, NATIONAL, RFC3966
+// See: \libphonenumber\PhoneNumberFormat constants
+
+'phone_format_set' => \libphonenumber\PhoneNumberFormat::NATIONAL,  // Storage format
+'phone_format_get' => \libphonenumber\PhoneNumberFormat::NATIONAL,  // Retrieval format
+```
+
+**Format examples:**
+- **E164**: `+996555123456`
+- **INTERNATIONAL**: `+996 555 123 456`
+- **NATIONAL**: `0555 123 456` (default)
+- **RFC3966**: `tel:+996-555-123456`
 
 ## Testing
 

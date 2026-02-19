@@ -73,13 +73,11 @@ it('casts type as ContactTypeEnum', function () {
 });
 
 it('casts value as string', function () {
-    $contact = $this->customer->contacts()->create([
+    $this->customer->contacts()->create([
         'type' => ContactTypeEnum::Phone,
         'value' => 1234567890,
     ]);
-
-    expect($contact->value)->toBeString();
-});
+})->throws(InvalidArgumentException::class);
 
 it('casts is_primary as boolean', function () {
     $contact = $this->customer->contacts()->create([
@@ -203,7 +201,7 @@ it('can create multiple contacts for same model', function () {
 
     $phone = $this->customer->contacts()->create([
         'type' => ContactTypeEnum::Phone,
-        'value' => '+1234567890',
+        'value' => '+996555123456',
         'is_primary' => false,
     ]);
 
@@ -261,7 +259,7 @@ it('can access contacts via relationship', function () {
 
     $this->customer->contacts()->create([
         'type' => ContactTypeEnum::Phone,
-        'value' => '+1234567890',
+        'value' => '0555123456',
     ]);
 
     expect($this->customer->contacts)->toHaveCount(2)

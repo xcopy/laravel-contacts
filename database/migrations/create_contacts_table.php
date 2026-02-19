@@ -16,6 +16,7 @@ return new class extends Migration
             $table->morphs('model');
             $table->enum('type', ContactTypeEnum::values())->default(ContactTypeEnum::Phone);
             $table->string('value');
+            $table->string('country_code', 2)->nullable();
             $table->boolean('is_primary')->default(false);
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
@@ -28,8 +29,18 @@ return new class extends Migration
                     ->constrained($usersTable);
             }
 
-            $table->unique(['model_type', 'model_id', 'type', 'value'], 'contacts_unique_model_type_value');
+            $table->unique(['model_type', 'model_id', 'type', 'value'], 'unique_value_per_model_type');
         });
+
+        $driver = DB::getDriverName();
+
+        if ($driver === 'pgsql' || $driver === 'sqlite') {
+            DB::statement("
+                CREATE UNIQUE INDEX unique_primary_per_model_type
+                ON {$config['table']} (model_type, model_id, type, is_primary)
+                WHERE is_primary = true;
+            ");
+        }
     }
 
     public function down(): void
