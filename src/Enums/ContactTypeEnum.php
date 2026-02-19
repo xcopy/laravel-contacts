@@ -26,7 +26,7 @@ enum ContactTypeEnum: string
     case Email = 'email';
     case Whatsapp = 'whatsapp';
     case Telegram = 'telegram';
-    case Website = 'website';
+    case Url = 'url';
     case Other = 'other';
 
     /**
@@ -34,11 +34,11 @@ enum ContactTypeEnum: string
      */
     public function label(): string
     {
-        if ($this->value === 'whatsapp') {
-            return __('WhatsApp');
-        }
-
-        return $this->traitLabel();
+        return match ($this) {
+            self::Whatsapp => 'WhatsApp',
+            self::Url => 'URL',
+            default => $this->traitLabel(),
+        };
     }
 
     /**
@@ -51,7 +51,7 @@ enum ContactTypeEnum: string
         return match ($this) {
             self::Phone => PhoneStrategy::class,
             self::Email => EmailStrategy::class,
-            self::Website => UrlStrategy::class,
+            self::Url => UrlStrategy::class,
             self::Whatsapp => WhatsAppStrategy::class,
             self::Telegram => TelegramStrategy::class,
             self::Other => NullStrategy::class,

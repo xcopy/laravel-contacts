@@ -156,11 +156,11 @@ class Contact extends Model
     }
 
     /**
-     * Scope a query to only include website contacts.
+     * Scope a query to only include URL contacts.
      */
-    public function scopeWebsite($query)
+    public function scopeUrl($query)
     {
-        return $query->where('type', ContactTypeEnum::Website);
+        return $query->where('type', ContactTypeEnum::Url);
     }
 
     /**

@@ -94,9 +94,9 @@ it('uses phone strategy for phone type', function () {
     expect($contact->getRawOriginal('value'))->toBe('0555 123 456');
 });
 
-it('uses url strategy for website type', function () {
+it('uses url strategy for url type', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Website,
+        'type' => ContactTypeEnum::Url,
         'value' => 'example.com',
     ]);
 

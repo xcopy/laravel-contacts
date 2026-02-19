@@ -9,7 +9,7 @@ it('has all expected cases', function () {
         ->and($cases)->toContain(ContactTypeEnum::Email)
         ->and($cases)->toContain(ContactTypeEnum::Whatsapp)
         ->and($cases)->toContain(ContactTypeEnum::Telegram)
-        ->and($cases)->toContain(ContactTypeEnum::Website)
+        ->and($cases)->toContain(ContactTypeEnum::Url)
         ->and($cases)->toContain(ContactTypeEnum::Other);
 });
 
@@ -18,7 +18,7 @@ it('has correct values for each case', function () {
         ->and(ContactTypeEnum::Email->value)->toBe('email')
         ->and(ContactTypeEnum::Whatsapp->value)->toBe('whatsapp')
         ->and(ContactTypeEnum::Telegram->value)->toBe('telegram')
-        ->and(ContactTypeEnum::Website->value)->toBe('website')
+        ->and(ContactTypeEnum::Url->value)->toBe('url')
         ->and(ContactTypeEnum::Other->value)->toBe('other');
 });
 
@@ -27,7 +27,7 @@ it('can be instantiated from value', function () {
         ->and(ContactTypeEnum::from('email'))->toBe(ContactTypeEnum::Email)
         ->and(ContactTypeEnum::from('whatsapp'))->toBe(ContactTypeEnum::Whatsapp)
         ->and(ContactTypeEnum::from('telegram'))->toBe(ContactTypeEnum::Telegram)
-        ->and(ContactTypeEnum::from('website'))->toBe(ContactTypeEnum::Website)
+        ->and(ContactTypeEnum::from('url'))->toBe(ContactTypeEnum::Url)
         ->and(ContactTypeEnum::from('other'))->toBe(ContactTypeEnum::Other);
 });
 
@@ -63,7 +63,7 @@ it('returns all values using HasValues trait', function () {
         ->and($values)->toContain('email')
         ->and($values)->toContain('whatsapp')
         ->and($values)->toContain('telegram')
-        ->and($values)->toContain('website')
+        ->and($values)->toContain('url')
         ->and($values)->toContain('other');
 });
 
@@ -73,7 +73,7 @@ it('returns choices using HasChoices trait', function () {
     expect($choices)
         ->toBeArray()
         ->and($choices)
-        ->toHaveKeys(['phone', 'email', 'whatsapp', 'telegram', 'website', 'other']);
+        ->toHaveKeys(['phone', 'email', 'whatsapp', 'telegram', 'url', 'other']);
 });
 
 it('choices return case names as values', function () {
@@ -83,7 +83,7 @@ it('choices return case names as values', function () {
         ->and($choices['email'])->toBe('Email')
         ->and($choices['whatsapp'])->toBe('WhatsApp')
         ->and($choices['telegram'])->toBe('Telegram')
-        ->and($choices['website'])->toBe('Website')
+        ->and($choices['url'])->toBe('URL')
         ->and($choices['other'])->toBe('Other');
 });
 
@@ -115,9 +115,9 @@ it('has messaging app cases', function () {
 
 it('has digital contact cases', function () {
     expect(ContactTypeEnum::Email)->toBeInstanceOf(ContactTypeEnum::class)
-        ->and(ContactTypeEnum::Website)->toBeInstanceOf(ContactTypeEnum::class)
+        ->and(ContactTypeEnum::Url)->toBeInstanceOf(ContactTypeEnum::class)
         ->and(ContactTypeEnum::Email->value)->toBe('email')
-        ->and(ContactTypeEnum::Website->value)->toBe('website');
+        ->and(ContactTypeEnum::Url->value)->toBe('url');
 });
 
 it('has other as fallback case', function () {

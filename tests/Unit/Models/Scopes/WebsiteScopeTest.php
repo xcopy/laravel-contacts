@@ -8,9 +8,9 @@ beforeEach(function () {
     $this->customer = Customer::create(['name' => 'Test Customer']);
 });
 
-it('filters contacts by website type using local scope', function () {
+it('filters contacts by url type using local scope', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Website,
+        'type' => ContactTypeEnum::Url,
         'value' => 'https://example.com',
     ]);
 
@@ -20,23 +20,23 @@ it('filters contacts by website type using local scope', function () {
     ]);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Website,
+        'type' => ContactTypeEnum::Url,
         'value' => 'https://example.org',
     ]);
 
-    $websiteContacts = Contact::website()->get();
+    $urlContacts = Contact::url()->get();
 
-    expect($websiteContacts)->toHaveCount(2)
-        ->and($websiteContacts->every(fn ($contact) => $contact->type === ContactTypeEnum::Website))->toBeTrue();
+    expect($urlContacts)->toHaveCount(2)
+        ->and($urlContacts->every(fn ($contact) => $contact->type === ContactTypeEnum::Url))->toBeTrue();
 });
 
-it('returns empty collection when no website contacts exist', function () {
+it('returns empty collection when no url contacts exist', function () {
     $this->customer->contacts()->create([
         'type' => ContactTypeEnum::Phone,
         'value' => '+996555123456',
     ]);
 
-    $websiteContacts = Contact::website()->get();
+    $urlContacts = Contact::url()->get();
 
-    expect($websiteContacts)->toHaveCount(0);
+    expect($urlContacts)->toHaveCount(0);
 });
