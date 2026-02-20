@@ -5,7 +5,7 @@ namespace Jenishev\Laravel\Contacts\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
-use Jenishev\Laravel\Contacts\Casts\ContactValue;
+use Jenishev\Laravel\Contacts\Casts\AsValue;
 use Jenishev\Laravel\Contacts\Contracts\HasContacts;
 use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
 use Jenishev\Laravel\Support\Eloquent\Casts\AsModelClass;
@@ -96,7 +96,7 @@ class Contact extends Model
             'model_type' => AsModelClass::of(HasContacts::class),
             'model_id' => 'integer',
             'type' => ContactTypeEnum::class,
-            'value' => ContactValue::class,
+            'value' => AsValue::class,
             'country_code' => 'string',
             'is_primary' => 'boolean',
             'is_verified' => 'boolean',

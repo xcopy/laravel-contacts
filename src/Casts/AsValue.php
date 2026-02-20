@@ -12,7 +12,7 @@ use ValueError;
 /**
  * Custom cast for contact values that applies type-specific validation and normalization.
  */
-class ContactValue implements CastsAttributes
+class AsValue implements CastsAttributes
 {
     /**
      * Resolve the appropriate strategy based on contact type.
