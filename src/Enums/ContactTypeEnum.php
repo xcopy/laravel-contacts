@@ -22,12 +22,12 @@ enum ContactTypeEnum: string
     }
     use HasValues;
 
-    case Phone = 'phone';
     case Email = 'email';
-    case Whatsapp = 'whatsapp';
+    case Other = 'other';
+    case Phone = 'phone';
     case Telegram = 'telegram';
     case Url = 'url';
-    case Other = 'other';
+    case Whatsapp = 'whatsapp';
 
     /**
      * {@inheritDoc}
@@ -35,8 +35,8 @@ enum ContactTypeEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::Whatsapp => 'WhatsApp',
             self::Url => 'URL',
+            self::Whatsapp => 'WhatsApp',
             default => $this->traitLabel(),
         };
     }
@@ -49,12 +49,12 @@ enum ContactTypeEnum: string
     public function getStrategyClass(): string
     {
         return match ($this) {
-            self::Phone => PhoneStrategy::class,
             self::Email => EmailStrategy::class,
+            self::Other => NullStrategy::class,
+            self::Phone => PhoneStrategy::class,
+            self::Telegram => TelegramStrategy::class,
             self::Url => UrlStrategy::class,
             self::Whatsapp => WhatsAppStrategy::class,
-            self::Telegram => TelegramStrategy::class,
-            self::Other => NullStrategy::class,
             // default will throw an exception
         };
     }
