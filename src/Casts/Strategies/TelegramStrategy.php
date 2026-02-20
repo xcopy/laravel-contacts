@@ -2,12 +2,10 @@
 
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
-
 /**
  * Validates and normalizes Telegram usernames (5-32 chars, alphanumeric + underscore).
  */
-class TelegramStrategy implements ContactValueStrategy
+class TelegramStrategy implements Strategy
 {
     use FailsWithType;
 

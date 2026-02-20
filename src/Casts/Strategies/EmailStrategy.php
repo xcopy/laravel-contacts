@@ -4,12 +4,11 @@ namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 
 /**
  * Validates and normalizes email addresses (RFC compliant, lowercased).
  */
-class EmailStrategy implements ContactValueStrategy
+class EmailStrategy implements Strategy
 {
     use FailsWithType;
 

@@ -5,7 +5,7 @@ namespace Jenishev\Laravel\Contacts\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Jenishev\Laravel\Contacts\Casts\Strategies\NullStrategy;
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
+use Jenishev\Laravel\Contacts\Casts\Strategies\Strategy;
 use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
 use ValueError;
 
@@ -17,7 +17,7 @@ class ContactValue implements CastsAttributes
     /**
      * Resolve the appropriate strategy based on contact type.
      */
-    private function resolveStrategy(ContactTypeEnum|string|null $type): ContactValueStrategy
+    private function resolveStrategy(ContactTypeEnum|string|null $type): Strategy
     {
         if ($type instanceof ContactTypeEnum) {
             $class = $type->getStrategyClass();

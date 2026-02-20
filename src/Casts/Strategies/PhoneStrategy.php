@@ -3,13 +3,12 @@
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Illuminate\Support\Str;
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 use libphonenumber\PhoneNumberFormat;
 
 /**
  * Validates and formats phone numbers with configurable format and country code support.
  */
-class PhoneStrategy implements ContactValueStrategy
+class PhoneStrategy implements Strategy
 {
     use FailsWithType;
 

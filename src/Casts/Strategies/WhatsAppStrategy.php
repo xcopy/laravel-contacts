@@ -3,12 +3,11 @@
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Illuminate\Support\Str;
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 
 /**
  * Validates and formats WhatsApp numbers to E.164 format with country code support.
  */
-class WhatsAppStrategy implements ContactValueStrategy
+class WhatsAppStrategy implements Strategy
 {
     use FailsWithType;
 

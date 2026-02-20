@@ -2,14 +2,13 @@
 
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 use League\Uri\Contracts\UriException;
 use League\Uri\Uri;
 
 /**
  * Validates and normalizes URLs (auto-adds https://, removes trailing slash).
  */
-class UrlStrategy implements ContactValueStrategy
+class UrlStrategy implements Strategy
 {
     use FailsWithType;
 

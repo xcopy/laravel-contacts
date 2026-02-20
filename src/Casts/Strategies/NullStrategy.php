@@ -2,12 +2,10 @@
 
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
-use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
-
 /**
  * Fallback strategy that performs no validation or transformation.
  */
-class NullStrategy implements ContactValueStrategy
+class NullStrategy implements Strategy
 {
     /**
      * {@inheritDoc}
