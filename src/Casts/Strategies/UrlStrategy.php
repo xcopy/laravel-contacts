@@ -2,7 +2,6 @@
 
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
-use Jenishev\Laravel\Contacts\Concerns\HasContactValidation;
 use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 use League\Uri\Contracts\UriException;
 use League\Uri\Uri;
@@ -12,7 +11,7 @@ use League\Uri\Uri;
  */
 class UrlStrategy implements ContactValueStrategy
 {
-    use HasContactValidation;
+    use FailsWithType;
 
     /**
      * {@inheritDoc}

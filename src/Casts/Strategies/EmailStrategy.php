@@ -4,7 +4,6 @@ namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
-use Jenishev\Laravel\Contacts\Concerns\HasContactValidation;
 use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 
 /**
@@ -12,7 +11,7 @@ use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
  */
 class EmailStrategy implements ContactValueStrategy
 {
-    use HasContactValidation;
+    use FailsWithType;
 
     /**
      * {@inheritDoc}

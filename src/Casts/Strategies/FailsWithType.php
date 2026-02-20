@@ -1,13 +1,13 @@
 <?php
 
-namespace Jenishev\Laravel\Contacts\Concerns;
+namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use InvalidArgumentException;
 
 /**
  * Provides validation error handling for contact strategies.
  */
-trait HasContactValidation
+trait FailsWithType
 {
     /**
      * Throw an exception with a formatted error message.

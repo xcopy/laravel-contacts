@@ -3,7 +3,6 @@
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Illuminate\Support\Str;
-use Jenishev\Laravel\Contacts\Concerns\HasContactValidation;
 use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 
 /**
@@ -11,7 +10,7 @@ use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
  */
 class WhatsAppStrategy implements ContactValueStrategy
 {
-    use HasContactValidation;
+    use FailsWithType;
 
     /**
      * {@inheritDoc}

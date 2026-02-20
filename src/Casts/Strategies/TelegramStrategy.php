@@ -2,7 +2,6 @@
 
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
-use Jenishev\Laravel\Contacts\Concerns\HasContactValidation;
 use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 
 /**
@@ -10,7 +9,7 @@ use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
  */
 class TelegramStrategy implements ContactValueStrategy
 {
-    use HasContactValidation;
+    use FailsWithType;
 
     /**
      * {@inheritDoc}

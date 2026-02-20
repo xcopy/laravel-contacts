@@ -3,7 +3,6 @@
 namespace Jenishev\Laravel\Contacts\Casts\Strategies;
 
 use Illuminate\Support\Str;
-use Jenishev\Laravel\Contacts\Concerns\HasContactValidation;
 use Jenishev\Laravel\Contacts\Contracts\ContactValueStrategy;
 use libphonenumber\PhoneNumberFormat;
 
@@ -12,7 +11,7 @@ use libphonenumber\PhoneNumberFormat;
  */
 class PhoneStrategy implements ContactValueStrategy
 {
-    use HasContactValidation;
+    use FailsWithType;
 
     private static array $cache = [];
 
