@@ -2,7 +2,6 @@
 
 namespace Jenishev\Laravel\Contacts;
 
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -23,10 +22,22 @@ class ContactsServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-contacts')
             ->hasConfigFile()
-            ->hasMigration('create_contacts_table')
-            ->hasInstallCommand(function (InstallCommand $command) {
-                $command->publishConfigFile();
-                $command->publishMigrations();
-            });
+            ->hasMigration('create_contacts_table');
+    }
+
+    public function packageBooted(): void
+    {
+        if ($this->app->runningInConsole()) {
+            foreach (['config', 'migrations'] as $key) {
+                $group = "contacts-$key";
+
+                $this->publishes(
+                    static::pathsToPublish(self::class, $group),
+                    $key
+                );
+
+                unset(static::$publishGroups[$group]);
+            }
+        }
     }
 }

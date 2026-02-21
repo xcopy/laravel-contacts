@@ -34,18 +34,11 @@ Perfect for multi-tenant SaaS applications, CRMs, or property management systems
 }
 ```
 
-Run the installation command (publishes config and migrations):
+Run the installation commands:
 
 ```bash
-php artisan contacts:install
-php artisan migrate
-```
-
-Or publish manually:
-
-```bash
-php artisan vendor:publish --tag="contacts-migrations"
-php artisan vendor:publish --tag="contacts-config"
+php artisan vendor:publish --provider="Jenishev\Laravel\Contacts\ContactsServiceProvider" --tag=config
+php artisan vendor:publish --provider="Jenishev\Laravel\Contacts\ContactsServiceProvider" --tag=migrations
 php artisan migrate
 ```
 
