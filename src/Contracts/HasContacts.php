@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * contact records (phone, email, address, etc.).
  *
  * @mixin Model
+ *
  * @property-read Collection $contacts
  */
 interface HasContacts
