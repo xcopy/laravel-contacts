@@ -1,5 +1,8 @@
 <?php
 
+use Jenishev\Laravel\Contacts\Models\Contact;
+use libphonenumber\PhoneNumberFormat;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +22,7 @@ return [
     | The fully qualified class name of the Contact model.
     |
     */
-    'model' => Jenishev\Laravel\Contacts\Models\Contact::class,
+    'model' => Contact::class,
     // 'model' => App\Models\Contact::class,
 
     /*
@@ -53,7 +56,7 @@ return [
     | See: \libphonenumber\PhoneNumberFormat enum
     |
     */
-    'phone_format_set' => env('CONTACTS_PHONE_FORMAT_SET', \libphonenumber\PhoneNumberFormat::NATIONAL->name),
+    'phone_format_set' => env('CONTACTS_PHONE_FORMAT_SET', PhoneNumberFormat::NATIONAL->name),
 
     /*
     |--------------------------------------------------------------------------
@@ -65,5 +68,5 @@ return [
     | See: \libphonenumber\PhoneNumberFormat enum
     |
     */
-    'phone_format_get' => env('CONTACTS_PHONE_FORMAT_GET', \libphonenumber\PhoneNumberFormat::NATIONAL->name),
+    'phone_format_get' => env('CONTACTS_PHONE_FORMAT_GET', PhoneNumberFormat::NATIONAL->name),
 ];
