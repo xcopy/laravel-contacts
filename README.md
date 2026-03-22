@@ -18,20 +18,8 @@ Perfect for multi-tenant SaaS applications, CRMs, or property management systems
 
 ## Installation
 
-**Note:** This package is not yet available on Packagist. You must add it to your `composer.json` manually.
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/xcopy/laravel-contacts"
-        }
-    ],
-    "require": {
-        "xcopy/laravel-contacts": "dev-main"
-    }
-}
+```
+composer require xcopy/laravel-contacts
 ```
 
 Run the installation commands:
