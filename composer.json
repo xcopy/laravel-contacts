@@ -25,7 +25,7 @@
         "propaganistas/laravel-phone": "^6.0",
         "richan-fongdasen/eloquent-blameable": "^1.11",
         "spatie/laravel-package-tools": "^1.16",
-        "xcopy/laravel-support": "dev-main"
+        "xcopy/laravel-support": "^1.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.9",
