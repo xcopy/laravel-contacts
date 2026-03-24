@@ -19,7 +19,7 @@ Perfect for multi-tenant SaaS applications, CRMs, or property management systems
 ## Installation
 
 ```
-composer require xcopy/laravel-contacts
+composer require xcopy/laravel-contacts:dev-main
 ```
 
 Run the installation commands:
