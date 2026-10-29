@@ -6,7 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Jenishev\Laravel\Contacts\Casts\Strategies\NullStrategy;
 use Jenishev\Laravel\Contacts\Casts\Strategies\Strategy;
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use ValueError;
 
 /**
@@ -17,13 +17,13 @@ class AsValue implements CastsAttributes
     /**
      * Resolve the appropriate strategy based on contact type.
      */
-    private function resolveStrategy(ContactTypeEnum|string|null $type): Strategy
+    private function resolveStrategy(ContactTypes|string|null $type): Strategy
     {
-        if ($type instanceof ContactTypeEnum) {
+        if ($type instanceof ContactTypes) {
             $class = $type->getStrategyClass();
         } else {
             try {
-                $class = ContactTypeEnum::from((string) $type)->getStrategyClass();
+                $class = ContactTypes::from((string) $type)->getStrategyClass();
             } catch (ValueError) {
                 $class = NullStrategy::class;
             }

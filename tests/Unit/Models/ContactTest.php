@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Jenishev\Laravel\Contacts\Models\Contact;
 use Workbench\App\Models\Customer;
 use Workbench\App\Models\User;
@@ -24,7 +24,7 @@ beforeEach(function () {
 
 it('can create a contact via relationship', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => true,
         'is_verified' => false,
@@ -33,7 +33,7 @@ it('can create a contact via relationship', function () {
     expect($contact)->toBeInstanceOf(Contact::class)
         ->and($contact->model_type)->toBe(Customer::class)
         ->and($contact->model_id)->toBe($this->customer->id)
-        ->and($contact->type)->toBe(ContactTypeEnum::Email)
+        ->and($contact->type)->toBe(ContactTypes::Email)
         ->and($contact->value)->toBe('test@example.com')
         ->and($contact->is_primary)->toBeTrue()
         ->and($contact->is_verified)->toBeFalse();
@@ -47,7 +47,7 @@ it('uses the table name from config', function () {
 
 it('casts model_type as model class', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -56,32 +56,32 @@ it('casts model_type as model class', function () {
 
 it('casts model_id as integer', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
     expect($contact->model_id)->toBeInt();
 });
 
-it('casts type as ContactTypeEnum', function () {
+it('casts type as ContactTypes', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
-    expect($contact->type)->toBeInstanceOf(ContactTypeEnum::class);
+    expect($contact->type)->toBeInstanceOf(ContactTypes::class);
 });
 
 it('casts value as string', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => 1234567890,
     ]);
 })->throws(InvalidArgumentException::class);
 
 it('casts is_primary as boolean', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => 1,
     ]);
@@ -91,7 +91,7 @@ it('casts is_primary as boolean', function () {
 
 it('casts is_verified as boolean', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_verified' => 0,
     ]);
@@ -101,7 +101,7 @@ it('casts is_verified as boolean', function () {
 
 it('has a morphTo relationship with model', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -112,7 +112,7 @@ it('has a morphTo relationship with model', function () {
 
 it('can eager load model relationship', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -125,13 +125,13 @@ it('can eager load model relationship', function () {
 
 it('can query contacts by model relationship', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
     $anotherCustomer = Customer::create(['name' => 'Another Customer']);
     $anotherCustomer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'another@example.com',
     ]);
 
@@ -145,7 +145,7 @@ it('can query contacts by model relationship', function () {
 
 it('model relationship returns null for deleted parent', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -160,7 +160,7 @@ it('model relationship returns null for deleted parent', function () {
 
 it('can access model relationship multiple times without extra queries', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -175,7 +175,7 @@ it('can access model relationship multiple times without extra queries', functio
 
 it('stores contact in database', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => true,
         'is_verified' => true,
@@ -185,7 +185,7 @@ it('stores contact in database', function () {
         'id' => $contact->id,
         'model_type' => Customer::class,
         'model_id' => $this->customer->id,
-        'type' => ContactTypeEnum::Email->value,
+        'type' => ContactTypes::Email->value,
         'value' => 'test@example.com',
         'is_primary' => true,
         'is_verified' => true,
@@ -194,25 +194,25 @@ it('stores contact in database', function () {
 
 it('can create multiple contacts for same model', function () {
     $email = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => true,
     ]);
 
     $phone = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => false,
     ]);
 
     expect($this->customer->contacts()->count())->toBe(2)
-        ->and($email->type)->toBe(ContactTypeEnum::Email)
-        ->and($phone->type)->toBe(ContactTypeEnum::Phone);
+        ->and($email->type)->toBe(ContactTypes::Email)
+        ->and($phone->type)->toBe(ContactTypes::Phone);
 });
 
 it('can update contact value', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'old@example.com',
     ]);
 
@@ -223,7 +223,7 @@ it('can update contact value', function () {
 
 it('can delete contact', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -235,7 +235,7 @@ it('can delete contact', function () {
 
 it('defaults is_primary to false when not provided', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -244,7 +244,7 @@ it('defaults is_primary to false when not provided', function () {
 
 it('defaults is_verified to false when not provided', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -253,12 +253,12 @@ it('defaults is_verified to false when not provided', function () {
 
 it('can access contacts via relationship', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'email@example.com',
     ]);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '0555123456',
     ]);
 
@@ -268,7 +268,7 @@ it('can access contacts via relationship', function () {
 
 it('automatically sets created_by when creating contact', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -278,7 +278,7 @@ it('automatically sets created_by when creating contact', function () {
 
 it('automatically sets updated_by when updating contact', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -298,7 +298,7 @@ it('automatically sets updated_by when updating contact', function () {
 
 it('has creator relationship', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -309,7 +309,7 @@ it('has creator relationship', function () {
 
 it('has updater relationship', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -320,7 +320,7 @@ it('has updater relationship', function () {
 
 it('can eager load creator and updater relationships', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -334,7 +334,7 @@ it('can eager load creator and updater relationships', function () {
 
 it('tracks different users for create and update', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -356,7 +356,7 @@ it('tracks different users for create and update', function () {
 
 it('stores created_by and updated_by in database', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -369,7 +369,7 @@ it('stores created_by and updated_by in database', function () {
 
 it('can query contacts by created_by', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test1@example.com',
     ]);
 
@@ -381,7 +381,7 @@ it('can query contacts by created_by', function () {
     $this->actingAs($anotherUser);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test2@example.com',
     ]);
 
@@ -396,7 +396,7 @@ it('can query contacts by created_by', function () {
 
 it('casts created_by as integer', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -405,7 +405,7 @@ it('casts created_by as integer', function () {
 
 it('casts updated_by as integer', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 

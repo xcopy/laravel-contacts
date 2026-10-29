@@ -32,18 +32,19 @@ php artisan migrate
 
 ## Usage
 
-### 1. Add the trait to your model
+### 1. Make your model contactable
 
-Add the `HasContacts` trait to any model that needs contact information:
+Implement the `Contactable` interface and use the `HasContacts` trait on any model that needs contact information:
 
 ```php
 use Illuminate\Database\Eloquent\Model;
 use Jenishev\Laravel\Contacts\Concerns\HasContacts;
+use Jenishev\Laravel\Contacts\Contracts\Contactable;
 
-class Company extends Model
+class Company extends Model implements Contactable
 {
     use HasContacts;
-    
+
     // ... your model code
 }
 ```
@@ -51,13 +52,13 @@ class Company extends Model
 ### 2. Create contacts
 
 ```php
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 
 $company = Company::find(1);
 
 // Create a primary email contact
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Email,
+    'type' => ContactTypes::Email,
     'value' => 'info@company.com',
     'is_primary' => true,
     'is_verified' => true,
@@ -65,14 +66,14 @@ $company->contacts()->create([
 
 // Create a phone contact
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Phone,
+    'type' => ContactTypes::Phone,
     'value' => '+1234567890',
     'is_primary' => false,
 ]);
 
 // Create a WhatsApp contact
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Whatsapp,
+    'type' => ContactTypes::Whatsapp,
     'value' => '+1234567890',
 ]);
 ```
@@ -84,7 +85,7 @@ $company->contacts()->create([
 $contacts = $company->contacts;
 
 // Get contacts of a specific type
-$emails = $company->contacts()->where('type', ContactTypeEnum::Email)->get();
+$emails = $company->contacts()->where('type', ContactTypes::Email)->get();
 
 // Get primary contact
 $primaryContact = $company->contacts()->where('is_primary', true)->first();
@@ -100,32 +101,32 @@ Contact values are automatically validated and normalized based on their type:
 ```php
 // Email: lowercased and validated
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Email,
+    'type' => ContactTypes::Email,
     'value' => 'User@Example.COM', // stored as: user@example.com
 ]);
 
 // Phone: formatted to E.164
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Phone,
+    'type' => ContactTypes::Phone,
     'value' => '0555123456', // stored as: +996555123456
     'country_code' => 'KG',  // optional, defaults to config
 ]);
 
 // Telegram: normalized username
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Telegram,
+    'type' => ContactTypes::Telegram,
     'value' => '@UserName', // stored as: username, retrieved as: @username
 ]);
 
 // Website: normalized URL
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Website,
+    'type' => ContactTypes::Url,
     'value' => 'example.com', // stored as: https://example.com
 ]);
 
 // WhatsApp: formatted to E.164
 $company->contacts()->create([
-    'type' => ContactTypeEnum::Whatsapp,
+    'type' => ContactTypes::Whatsapp,
     'value' => '0555123456', // stored as: +996555123456
     'country_code' => 'KG',
 ]);

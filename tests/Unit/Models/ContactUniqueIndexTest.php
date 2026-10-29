@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\QueryException;
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Workbench\App\Models\Customer;
 
 beforeEach(function () {
@@ -10,24 +10,24 @@ beforeEach(function () {
 
 it('enforces unique constraint on model_type, model_id, type, and value', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     expect(fn () => $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]))->toThrow(QueryException::class);
 });
 
 it('allows same value for different types', function () {
     $phone = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     $whatsapp = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Whatsapp,
+        'type' => ContactTypes::Whatsapp,
         'value' => '+996555123456',
     ]);
 
@@ -38,14 +38,14 @@ it('allows same value for different types', function () {
 
 it('allows same value and type for different models', function () {
     $contact1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'shared@example.com',
     ]);
 
     $customer2 = Customer::create(['name' => 'Second Customer']);
 
     $contact2 = $customer2->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'shared@example.com',
     ]);
 
@@ -56,29 +56,29 @@ it('allows same value and type for different models', function () {
 
 it('allows different values for same model and type', function () {
     $phone1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     $phone2 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
     ]);
 
     expect($phone1->type)->toBe($phone2->type)
         ->and($phone1->value)->not->toBe($phone2->value)
-        ->and($this->customer->contacts()->where('type', ContactTypeEnum::Phone)->count())->toBe(2);
+        ->and($this->customer->contacts()->where('type', ContactTypes::Phone)->count())->toBe(2);
 });
 
 it('prevents duplicate contact even with different is_primary values', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => true,
     ]);
 
     expect(fn () => $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => false,
     ]))->toThrow(QueryException::class);
@@ -86,13 +86,13 @@ it('prevents duplicate contact even with different is_primary values', function 
 
 it('prevents duplicate contact even with different is_verified values', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_verified' => true,
     ]);
 
     expect(fn () => $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_verified' => false,
     ]))->toThrow(QueryException::class);
@@ -100,13 +100,13 @@ it('prevents duplicate contact even with different is_verified values', function
 
 it('prevents duplicate contact even with different country_code values', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'country_code' => 'KG',
     ]);
 
     expect(fn () => $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'country_code' => 'US',
     ]))->toThrow(QueryException::class);
@@ -114,7 +114,7 @@ it('prevents duplicate contact even with different country_code values', functio
 
 it('allows updating to same value when it is the same record', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -126,12 +126,12 @@ it('allows updating to same value when it is the same record', function () {
 
 it('enforces unique constraint when updating value to existing value', function () {
     $contact1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'first@example.com',
     ]);
 
     $contact2 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'second@example.com',
     ]);
 
@@ -141,7 +141,7 @@ it('enforces unique constraint when updating value to existing value', function 
 
 it('allows updating value to a non-existing value', function () {
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'old@example.com',
     ]);
 
@@ -155,24 +155,24 @@ it('enforces unique constraint across multiple fields combination', function () 
 
     // Same value, same type, different model - should work
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     $customer2->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     // Same value, different type, same model - should work
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Whatsapp,
+        'type' => ContactTypes::Whatsapp,
         'value' => '+996555123456',
     ]);
 
     // Same value, same type, same model - should fail
     expect(fn () => $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]))->toThrow(QueryException::class);
 

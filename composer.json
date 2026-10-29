@@ -28,7 +28,7 @@
         "xcopy/laravel-support": "dev-main"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "*",
+        "ergebnis/composer-normalize": "^2.55",
         "larastan/larastan": "^3.9",
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.8",

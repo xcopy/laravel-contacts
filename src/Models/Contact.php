@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 use Jenishev\Laravel\Contacts\Casts\AsValue;
-use Jenishev\Laravel\Contacts\Contracts\HasContacts;
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Contracts\Contactable;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Jenishev\Laravel\Support\Eloquent\Casts\AsModelClass;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
@@ -17,7 +17,7 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @property int $id
  * @property string $model_type
  * @property int $model_id
- * @property ContactTypeEnum $type
+ * @property ContactTypes $type
  * @property mixed $value
  * @property string|null $country_code
  * @property bool $is_primary
@@ -93,9 +93,9 @@ class Contact extends Model
     protected function casts(): array
     {
         return [
-            'model_type' => AsModelClass::of(HasContacts::class),
+            'model_type' => AsModelClass::of(Contactable::class),
             'model_id' => 'integer',
-            'type' => ContactTypeEnum::class,
+            'type' => ContactTypes::class,
             'value' => AsValue::class,
             'country_code' => 'string',
             'is_primary' => 'boolean',
@@ -128,7 +128,7 @@ class Contact extends Model
      */
     public function scopePhone($query)
     {
-        return $query->where('type', ContactTypeEnum::Phone);
+        return $query->where('type', ContactTypes::Phone);
     }
 
     /**
@@ -136,7 +136,7 @@ class Contact extends Model
      */
     public function scopeEmail($query)
     {
-        return $query->where('type', ContactTypeEnum::Email);
+        return $query->where('type', ContactTypes::Email);
     }
 
     /**
@@ -144,7 +144,7 @@ class Contact extends Model
      */
     public function scopeWhatsapp($query)
     {
-        return $query->where('type', ContactTypeEnum::Whatsapp);
+        return $query->where('type', ContactTypes::Whatsapp);
     }
 
     /**
@@ -152,7 +152,7 @@ class Contact extends Model
      */
     public function scopeTelegram($query)
     {
-        return $query->where('type', ContactTypeEnum::Telegram);
+        return $query->where('type', ContactTypes::Telegram);
     }
 
     /**
@@ -160,7 +160,7 @@ class Contact extends Model
      */
     public function scopeUrl($query)
     {
-        return $query->where('type', ContactTypeEnum::Url);
+        return $query->where('type', ContactTypes::Url);
     }
 
     /**
@@ -168,6 +168,6 @@ class Contact extends Model
      */
     public function scopeOther($query)
     {
-        return $query->where('type', ContactTypeEnum::Other);
+        return $query->where('type', ContactTypes::Other);
     }
 }

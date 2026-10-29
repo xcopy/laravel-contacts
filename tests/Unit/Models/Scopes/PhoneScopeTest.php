@@ -1,6 +1,6 @@
 <?php
 
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Jenishev\Laravel\Contacts\Models\Contact;
 use Workbench\App\Models\Customer;
 
@@ -10,29 +10,29 @@ beforeEach(function () {
 
 it('filters contacts by phone type using local scope', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
     ]);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
     ]);
 
     $phoneContacts = Contact::phone()->get();
 
     expect($phoneContacts)->toHaveCount(2)
-        ->and($phoneContacts->every(fn ($contact) => $contact->type === ContactTypeEnum::Phone))->toBeTrue();
+        ->and($phoneContacts->every(fn ($contact) => $contact->type === ContactTypes::Phone))->toBeTrue();
 });
 
 it('returns empty collection when no phone contacts exist', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
     ]);
 
@@ -43,13 +43,13 @@ it('returns empty collection when no phone contacts exist', function () {
 
 it('combines with other query constraints', function () {
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => true,
     ]);
 
     $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
         'is_primary' => false,
     ]);

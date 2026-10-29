@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use Jenishev\Laravel\Contacts\Enums\ContactTypeEnum;
+use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Workbench\App\Models\Customer;
 
 beforeEach(function () {
@@ -16,14 +16,14 @@ it('enforces unique primary contact per model and type on PostgreSQL and SQLite'
     }
 
     $contact1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => true,
     ]);
 
     // Creating another primary contact should reset the first one's is_primary
     $contact2 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
         'is_primary' => true,
     ]);
@@ -42,18 +42,18 @@ it('allows multiple non-primary contacts of same type on PostgreSQL and SQLite',
     }
 
     $contact1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => false,
     ]);
 
     $contact2 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
         'is_primary' => false,
     ]);
 
-    expect($this->customer->contacts()->where('type', ContactTypeEnum::Phone)->count())->toBe(2)
+    expect($this->customer->contacts()->where('type', ContactTypes::Phone)->count())->toBe(2)
         ->and($contact1->is_primary)->toBeFalse()
         ->and($contact2->is_primary)->toBeFalse();
 })->skip(fn () => ! in_array(DB::getDriverName(), ['pgsql', 'sqlite']));
@@ -66,13 +66,13 @@ it('allows primary contacts of different types for same model on PostgreSQL and 
     }
 
     $phoneContact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => true,
     ]);
 
     $emailContact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Email,
+        'type' => ContactTypes::Email,
         'value' => 'test@example.com',
         'is_primary' => true,
     ]);
@@ -91,13 +91,13 @@ it('allows primary contacts of same type for different models on PostgreSQL and 
     $customer2 = Customer::create(['name' => 'Second Customer']);
 
     $contact1 = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => true,
     ]);
 
     $contact2 = $customer2->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555654321',
         'is_primary' => true,
     ]);
@@ -114,7 +114,7 @@ it('allows updating primary contact to non-primary on PostgreSQL and SQLite', fu
     }
 
     $contact = $this->customer->contacts()->create([
-        'type' => ContactTypeEnum::Phone,
+        'type' => ContactTypes::Phone,
         'value' => '+996555123456',
         'is_primary' => true,
     ]);

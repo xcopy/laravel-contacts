@@ -15,6 +15,8 @@ use Illuminate\Support\Collection;
  * @mixin Model
  *
  * @property-read Collection $contacts
+ *
+ * @deprecated use \Jenishev\Laravel\Contacts\Contracts\Contactable instead.
  */
 interface HasContacts
 {
