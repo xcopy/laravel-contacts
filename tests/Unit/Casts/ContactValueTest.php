@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Workbench\App\Models\Customer;
-use Workbench\App\Models\User;
 
 uses(RefreshDatabase::class);
 
@@ -11,13 +10,6 @@ beforeEach(function () {
     $this->customer = Customer::create([
         'name' => 'Test Customer',
     ]);
-
-    $this->user = User::create([
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-    ]);
-
-    $this->actingAs($this->user);
 });
 
 it('casts value based on contact type', function () {

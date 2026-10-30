@@ -4,7 +4,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Jenishev\Laravel\Contacts\Models\Contact;
 use Workbench\App\Models\Customer;
-use Workbench\App\Models\User;
 
 uses(RefreshDatabase::class);
 
@@ -12,14 +11,6 @@ beforeEach(function () {
     $this->customer = Customer::create([
         'name' => 'Test Customer',
     ]);
-
-    $this->user = User::create([
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-
-    ]);
-
-    $this->actingAs($this->user);
 });
 
 it('can create a contact via relationship', function () {
@@ -264,150 +255,4 @@ it('can access contacts via relationship', function () {
 
     expect($this->customer->contacts)->toHaveCount(2)
         ->and($this->customer->contacts->first())->toBeInstanceOf(Contact::class);
-});
-
-it('automatically sets created_by when creating contact', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    expect($contact->created_by)->toBe($this->user->id)
-        ->and($contact->updated_by)->toBe($this->user->id);
-});
-
-it('automatically sets updated_by when updating contact', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    $anotherUser = User::create([
-        'name' => 'Another User',
-        'email' => 'another@example.com',
-
-    ]);
-
-    $this->actingAs($anotherUser);
-
-    $contact->update(['value' => 'updated@example.com']);
-
-    expect($contact->created_by)->toBe($this->user->id)
-        ->and($contact->updated_by)->toBe($anotherUser->id);
-});
-
-it('has creator relationship', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    expect($contact->creator)->toBeInstanceOf(User::class)
-        ->and($contact->creator->id)->toBe($this->user->id)
-        ->and($contact->creator->name)->toBe($this->user->name);
-});
-
-it('has updater relationship', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    expect($contact->updater)->toBeInstanceOf(User::class)
-        ->and($contact->updater->id)->toBe($this->user->id)
-        ->and($contact->updater->name)->toBe($this->user->name);
-});
-
-it('can eager load creator and updater relationships', function () {
-    $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    $contact = Contact::with(['creator', 'updater'])->first();
-
-    expect($contact->relationLoaded('creator'))->toBeTrue()
-        ->and($contact->relationLoaded('updater'))->toBeTrue()
-        ->and($contact->creator)->toBeInstanceOf(User::class)
-        ->and($contact->updater)->toBeInstanceOf(User::class);
-});
-
-it('tracks different users for create and update', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    $updater = User::create([
-        'name' => 'Updater User',
-        'email' => 'updater@example.com',
-
-    ]);
-
-    $this->actingAs($updater);
-    $contact->update(['is_verified' => true]);
-    $contact->refresh();
-
-    expect($contact->created_by)->toBe($this->user->id)
-        ->and($contact->updated_by)->toBe($updater->id)
-        ->and($contact->creator->name)->toBe('Test User')
-        ->and($contact->updater->name)->toBe('Updater User');
-});
-
-it('stores created_by and updated_by in database', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    $this->assertDatabaseHas(config('contacts.table'), [
-        'id' => $contact->id,
-        'created_by' => $this->user->id,
-        'updated_by' => $this->user->id,
-    ]);
-});
-
-it('can query contacts by created_by', function () {
-    $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test1@example.com',
-    ]);
-
-    $anotherUser = User::create([
-        'name' => 'Another User',
-        'email' => 'another@example.com',
-    ]);
-
-    $this->actingAs($anotherUser);
-
-    $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test2@example.com',
-    ]);
-
-    $contactsByFirstUser = Contact::where('created_by', $this->user->id)->get();
-    $contactsBySecondUser = Contact::where('created_by', $anotherUser->id)->get();
-
-    expect($contactsByFirstUser)->toHaveCount(1)
-        ->and($contactsBySecondUser)->toHaveCount(1)
-        ->and($contactsByFirstUser->first()->value)->toBe('test1@example.com')
-        ->and($contactsBySecondUser->first()->value)->toBe('test2@example.com');
-});
-
-it('casts created_by as integer', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    expect($contact->created_by)->toBeInt();
-});
-
-it('casts updated_by as integer', function () {
-    $contact = $this->customer->contacts()->create([
-        'type' => ContactTypes::Email,
-        'value' => 'test@example.com',
-    ]);
-
-    expect($contact->updated_by)->toBeInt();
 });

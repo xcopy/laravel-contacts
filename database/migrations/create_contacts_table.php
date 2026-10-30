@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 
@@ -11,7 +12,7 @@ return new class extends Migration
     {
         $config = config('contacts');
 
-        Schema::create($config['table'], function (Blueprint $table) use ($config) {
+        Schema::create($config['table'], function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
             $table->enum('type', ContactTypes::values())->default(ContactTypes::Phone);
@@ -21,13 +22,13 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
 
-            $usersTable = (new $config['user_model'])->getTable();
+            // $table->softDeletes();
 
-            foreach (['created_by', 'updated_by'] as $column) {
-                $table->foreignId($column)
-                    ->nullable()
-                    ->constrained($usersTable);
+            /*
+            foreach (['created_by', 'updated_by', 'deleted_by'] as $column) {
+                $table->integer($column)->nullable();
             }
+            */
 
             $table->unique(['model_type', 'model_id', 'type', 'value'], 'unique_value_per_model_type');
         });

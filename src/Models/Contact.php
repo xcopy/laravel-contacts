@@ -9,7 +9,6 @@ use Jenishev\Laravel\Contacts\Casts\AsValue;
 use Jenishev\Laravel\Contacts\Contracts\Contactable;
 use Jenishev\Laravel\Contacts\Enums\ContactTypes;
 use Jenishev\Laravel\Support\Eloquent\Casts\AsModelClass;
-use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
 /**
  * Contact model for managing contact information.
@@ -24,13 +23,9 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
  * @property bool $is_verified
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int|null $created_by
- * @property int|null $updated_by
  */
 class Contact extends Model
 {
-    use BlameableTrait;
-
     /**
      * {@inheritDoc}
      */
@@ -109,18 +104,6 @@ class Contact extends Model
     public function model(): MorphTo
     {
         return $this->morphTo();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function blameable(): array
-    {
-        return [
-            'user' => config('contacts.user_model'),
-            'createdBy' => 'created_by',
-            'updatedBy' => 'updated_by',
-        ];
     }
 
     /**
